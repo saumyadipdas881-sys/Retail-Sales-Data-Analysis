@@ -1,0 +1,32 @@
+-- Create these measures in Power BI after loading the CSV table named sales.
+Total Revenue = SUM(sales[Revenue])
+
+Total Profit = SUM(sales[Profit])
+
+Total Orders = DISTINCTCOUNT(sales[Order_ID])
+
+Units Sold = SUM(sales[Quantity])
+
+Average Order Value = DIVIDE([Total Revenue], [Total Orders], 0)
+
+Profit Margin % = DIVIDE([Total Profit], [Total Revenue], 0)
+
+Returned Orders = CALCULATE([Total Orders], sales[Order_Status] = "Returned")
+
+Return Rate % = DIVIDE([Returned Orders], [Total Orders], 0)
+
+Cancelled Orders = CALCULATE([Total Orders], sales[Order_Status] = "Cancelled")
+
+Cancellation Rate % = DIVIDE([Cancelled Orders], [Total Orders], 0)
+
+Delivered Revenue = CALCULATE([Total Revenue], sales[Order_Status] = "Delivered")
+
+-- Optional date table:
+Date = CALENDAR(MIN(sales[Order_Date]), MAX(sales[Order_Date]))
+-- Add calculated columns to Date table:
+Year = YEAR('Date'[Date])
+Month = FORMAT('Date'[Date], "MMM")
+Month Number = MONTH('Date'[Date])
+Year-Month = FORMAT('Date'[Date], "YYYY-MM")
+-- Sort Date[Month] by Date[Month Number].
+-- Create relationship: Date[Date] -> sales[Order_Date].
